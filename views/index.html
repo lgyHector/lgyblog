@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<% include head.html %>
+</head>
+<body>
+	<div class="navbar navbar-inverse">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="#">blabla</a>
+				<ul class="nav">
+					<li><a href="#">首页</a></li>
+					<li><a href="#">XX</a></li>
+					<li><a href="#">OO</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div>
+	<%if(user){%>
+		<%=user.loginname%>
+	<%}%>
+	</div>
+</body>
+	
+</html>

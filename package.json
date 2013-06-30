@@ -1,0 +1,14 @@
+{
+  "name": "lgyblog",
+  "version": "0.0.1",
+  "private": true,
+  "author": "lgyhitler <lgyt34@hotmail.com>",
+  "description": "",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "3.2.2",
+    "ejs": "*"
+  }
+}
