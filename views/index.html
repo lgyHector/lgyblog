@@ -2,25 +2,81 @@
 <html>
 <head>
 	<% include head.html %>
+	<title><%=title%></title>
 </head>
 <body>
-	<div class="navbar navbar-inverse">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="brand" href="#">blabla</a>
-				<ul class="nav">
-					<li><a href="#">首页</a></li>
-					<li><a href="#">XX</a></li>
-					<li><a href="#">OO</a></li>
-				</ul>
+	<div id="head">
+		<% include top_bar.html %>
+		<script type="text/javascript">$('#index').addClass('active');</script>
+	</div>
+	<div id="wrap">
+		<div id="main">
+			<div id="content">
+				<div class="panel">
+				    <!-- <ul class="breadcrumb">
+					    <li><a href="#">首页</a> <span class="divider">/</span></li>
+					    <li><a href="#">Library</a> <span class="divider">/</span></li>
+					    <li class="active">Data</li>
+				    </ul> -->
+				    <div id="innner">
+						<div class="header-content">
+							最新吐槽
+							<button type="button" class="btn btn-success" id="new_t_btn" style="float:right">吐一个槽</button>
+						</div>
+						<div id="topic_list">
+							<% if(topics.length > 0){ 
+								for(var i=0;i < topics.length; i++){
+							%>
+							<div class="cell">
+								<div class="user_block">
+									<a href="#">
+										<img src="head_img.jpg" class="img-rounded head_img_45">
+									</a>
+								</div>
+								<div class="count_block"><a><%=topics[i].reply_count %></a><span>/<%=topics[i].click_count %></span></div>
+								<div class="title_block">
+									<a href="/topic/<%=topics[i].uuid%>"><%=topics[i].title%></a>
+								</div>
+								<div class="tag_block">
+									<span class="label label-important" style="margin-top: 20px;"><%=topics[i].tag%></span>
+								</div>
+								<div class="time_block"><%=dateformat(topics[i].create_time, 'yyyy/mm/dd HH:MM')%></div>
+							</div>
+							<% } } %>
+						</div>
+						<div class="page">
+							<div class="pagination">
+							    <ul>
+								    <li><a href="<%=url%><%=page.pageInfo.prev%>">«</a></li>
+								    <% for(var i=page.firstIndex;i <= page.lastIndex;i++){ %>
+								    <li <%if(page.pageInfo.current == i){%>class="active"<%}%> ><a href="<%=url%><%=i%>" ><%=i%></a></li>
+								    <% } %>
+								    <li><a href="<%=url%><%=page.pageInfo.next%>">»</a></li>
+							    </ul>
+						    </div>
+						</div>
+				    </div>
+				</div>
+			</div>
+			<div id="sidebar">
+				<% include user/user_info.html %>
+				<div class="panel">
+					<div class="header">热门吐槽</div>
+					<div class="inner">
+						ddd
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div>
-	<%if(user){%>
-		<%=user.loginname%>
-	<%}%>
+	<div id="foot">
+	
 	</div>
+	<script type="text/javascript">
+		$('#new_t_btn').bind('click', function(){
+			window.location.href = '/topic/newTopic';
+		});
+	</script>
 </body>
 	
 </html>

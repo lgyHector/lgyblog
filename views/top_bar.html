@@ -1,16 +1,48 @@
-<div class="navbar navbar-inverse">
+<div class="navbar">
 	<div class="navbar-inner">
-		<div class="container" style="width: 980px;">
-			<a class="brand" href="#">Sakula</a>
+		<div class="container" style="width: 1060px;margin: 0 auto;">
+			<a class="brand" href="#">卧槽~</a>
 			<ul class="nav">
-				<li><a href="#">首页</a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="#">莼菜</a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="#" id="loginName"><%=user.name%></a></li>
+				<li>
+				    <form class="navbar-search pull-left">
+				    	<input type="text" class="search-query search-icon">
+				    </form>
+				</li>
 			</ul>
 			<ul class="nav pull-right">
-				<li><a href="/logout">退出</a></li>
+				<li id="index">
+					<a href="/">首页</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<li id="strange">
+					<a href="#">奇怪的地方</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<li id="about">
+					<a href="/about">关于卧槽</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<li id="me">
+					<a href="#">Me</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<li id="setting">
+					<a href="/setting">设置</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<% if(user){ %>
+				<li id="logout">
+					<a href="/logout">退出</a>
+				</li>
+				<% }else{ %>
+				<li id="login">
+					<a href="/login">登录</a>
+				</li>
+				<li class="divider-vertical"></li>
+				<li id="regist">
+					<a href="/regist">注册</a>
+				</li>
+				<% } %>
 			</ul>
 		</div>
 	</div>

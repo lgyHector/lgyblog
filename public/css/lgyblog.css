@@ -1,0 +1,106 @@
+#wrap{
+	margin-top: 30px;
+}
+#main{
+	width: 1060px;
+	margin: 0 auto;
+}
+#content{
+	width: 760px; 
+	float: left;
+}
+#sidebar{
+	width: 290px; 
+	float:left; 
+	margin-left: 10px;
+}
+.panel{
+	border: 1px solid #E5E5E5;
+	border-radius: 4px;	
+	margin-bottom: 10px;
+}
+.inner{
+	padding: 10px;
+}
+.header, .header-content{
+	background-color: #EDEDED; 
+	padding: 7px 10px;
+}
+.header-content{
+	line-height:30px;
+}
+.cell{
+	box-shadow: 0 1px 0 #E5E5E5;
+	overflow: hidden;
+	padding: 1px 10px; 
+	position: relative;
+}
+.head_img_80{
+	width: 80px; 
+	height: 80px;
+}
+.head_img_60{
+	width: 60px; 
+	height: 60px;
+}
+.head_img_45{
+	width: 45px; 
+	height: 45px;
+}
+.user_block, .title_block, .count_block, .tag_block{
+	float:left;
+	line-height: 55px;
+	margin-right: 5px;
+}
+.count_block span{
+	color:#B7ADAD;
+}
+.time_block{
+	color:#B7ADAD;
+	float:right;
+	line-height: 50px;
+}
+.count_block{
+	margin: 0 10px;
+}
+.page{
+	padding: 0 10px;
+}
+.search-icon{
+	background: url('search.png') no-repeat scroll 4px 4px #FFFFFF;
+}
+.unlogin_box{
+	padding: 10px;
+}
+.saonian_box{
+	margin-bottom: 10px;
+}
+.saonian_img, .saonian_info{
+	line-height: 58px;
+	float:left;
+	margin-right: 5px;
+}
+.title-txtarea, .content-txtarea{
+	width: 600px;
+}
+.tag-select{
+	width: 80px;
+}
+.lgy-label {
+	font-weight: bold;
+}
+.topic-content {
+	padding:15px;
+	margin: 0 20px;
+}
+.topic-content div{
+	margin-bottom: 10px;
+}
+.topic-main {
+	padding: 0 15px;
+}
+.preview-box{
+	padding: 10px;
+	border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+}

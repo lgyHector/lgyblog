@@ -1,13 +1,22 @@
 var user = require('./controllers/User');
+var topic = require('./controllers/topic');
+var auth = require('./service/auth');
 
 
 module.exports =  function (app){
-	app.get('/', user.index);
+	app.get('/', topic.index);
 	
+	/**登录**/
 	app.get('/login', user.login);
 	app.post('/logon', user.logon);
 	app.get('/logout', user.logout);
-	app.get('/setting', user.setting);
-	app.post('/doSetting', user.doSetting);
+	app.get('/setting', auth.userRequired, user.setting);
+	app.post('/doSetting', auth.userRequired, user.doSetting);
+	
+	/**发帖**/
+	app.get('/topic/newTopic', auth.userRequired, topic.newTopic);
+	app.post('/topic/releaseTopic', auth.userRequired, topic.releaseTopic);
+	app.get('/topic/:uuid', topic.getTopicByUUid);
+	
 }
 

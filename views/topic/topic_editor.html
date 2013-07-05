@@ -1,0 +1,44 @@
+<div class="panel">
+	<% if(user) {%>
+	<div class="header">个人信息</div>
+	<div class="inner">
+		<div>
+			<img src="<%=site_host%>/head_img.jpg" class="img-polaroid head_img_80" />
+			<span>lgyhitler</span>
+		</div>
+		<div style="margin-top: 10px;">
+			<span class="label label-important">御宅</span>
+			<span class="label label-warning">游戏</span>
+			<span class="label label-inverse">腹黑</span>
+		</div>
+		<div style="margin-top: 10px; padding: 5px 5px;">
+			<ul class="unstyled">
+				<li>0 吐槽</li>
+				<li>0 槽点</li>
+				<li>0 关注</li>
+				<li>0 相关</li>
+			</ul>
+		</div>
+		<div class="alert alert-info">
+			宜将剩勇追穷寇，莫要沽名学霸王。
+		</div>
+	</div>
+	<% }else{ %>
+		<div class="unlogin_box">
+			<div class="saonian_box">
+				<div class="saonian_img"><img src="<%=site_host%>/saonian.jpg" class="img-rounded" /></div>
+				<div class="saonian_info">骚年, 节操何在？</div>
+				<div style="clear: both;"></div>
+			</div>
+			<div>
+				<button type="button" class="btn" id="reg_btn">马上注册</button>
+				已有账号的直接 <a href="/login">登录</a>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$('#reg_btn').bind('click', function(){
+				window.location.href = '/regist';
+			})
+		</script>
+	<% } %>
+</div>

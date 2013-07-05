@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<% include ../head.html %>
+</head>
+<body>
+	<div id="head">
+		<% include ../top_bar.html %>
+		<script type="text/javascript">$('#index').addClass('active');</script>
+	</div>
+	<div id="wrap">
+		<div id="main">
+			<div id="content">
+				<div class="panel">
+				    <div id="innner">
+						<div>
+							<ul class="breadcrumb">
+							    <li><a href="#">首页</a> <span class="divider">/</span></li>
+							    <li class="active">新的槽点</li>
+						    </ul>
+						</div>
+						<div class="topic-content">
+							<form action="/topic/releaseTopic" method="post" id="form1" class="form-horizontal">
+								<div>
+									<label class="lgy-label">标题</label>
+									<textarea rows="1" name="title" placeholder="为你的吐槽来一个标题，字数控制在10-50字之间" class="title-txtarea"></textarea>
+								</div>
+								<div>
+									<label class="lgy-label">内容</label>
+									<div>
+										<span class="badge badge-info" id="edit_mark" style="cursor: pointer;">Markdown</span>
+										<span class="badge" id="edit_pre" style="cursor: pointer;">Preview</span>
+									</div>
+									<textarea rows="5" name="content" placeholder="卧槽。。。" class="content-txtarea" id="edit_box"></textarea>
+									<div id="preview_box" class="preview-box"></div>
+								</div>
+								<div>
+									<label class="lgy-label">标签</label>
+									<select class="tag-select" name="tag">
+										<option value="技术">技术</option>
+										<option value="吐槽">吐槽</option>
+										<option value="测试">测试</option>
+									</select>
+								</div>
+								<div>
+									<button type="button" id="save_btn" class="btn btn-success">发布</button>
+								</div>
+							</form>
+						</div>
+				    </div>
+				</div>
+			</div>
+			<div id="sidebar">
+				<% include ../user/user_info.html %>
+				<div class="panel">
+					<div class="header">热门吐槽</div>
+					<div class="inner">
+						ddd
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="foot">
+	
+	</div>
+	<script type="text/javascript" src="<%=site_host%>/markdown.js"></script>
+	<script type="text/javascript">
+		$('#edit_pre').bind('click', function(){
+			var preview_content = markdown.toHTML($('#edit_box').val());
+			$('#edit_pre').addClass('badge-info');
+			$('#edit_mark').removeClass('badge-info');
+			
+			$('#preview_box').html(preview_content);
+			$('#edit_box').css('display', 'none');
+			$('#preview_box').css('display', 'block');
+		});
+		$('#edit_mark').bind('click', function(){
+			$('#edit_mark').addClass('badge-info');
+			$('#edit_pre').removeClass('badge-info');
+			
+			$('#edit_box').css('display', 'block');
+			$('#preview_box').css('display', 'none');
+		});
+		$('#new_t_btn').bind('click', function(){
+			window.location.href = '/topic/newTopic';
+		});
+		$('#save_btn').bind('click', function(){
+			$('#form1').submit();
+		});
+	</script>
+</body>
+	
+</html>

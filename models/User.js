@@ -12,6 +12,15 @@ function User(user){
 	this.email = user.email;
 	this.head_url = user.headUrl;
 	this.sign = user.sign;
+	this.properties = user.properties;
+	this.lastlogintime = user.lastlogintime;
+	
+	this.topic_count = user.topic_count;
+	this.reply_count = user.reply_count;
+	this.collect_topic_count = user.collect_topic_count;
+	this.score = user.score;
+	this.level = user.level;
+	
 }
 
 module.exports = User;
@@ -31,7 +40,8 @@ User.updateUser = function (user, callback){
 		name : user.name,
 		email : user.email,
 		sign : user.sign,
-		head_url : user.headUrl
+		head_url : user.headUrl,
+		lastlogintime : user.lastlogintime
 	}, function(affectedRows){
 		mysql.close();
 		callback(affectedRows);

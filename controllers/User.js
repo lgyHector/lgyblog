@@ -1,11 +1,7 @@
 var util = require('../utils/utils');
 var user = require('../models/User');
-
-
-exports.index = function (req, res, next){
-	console.log(req.cookies.lgyCookie);
-	res.render('index', {title:'Index'});
-};
+var dateformat = require('dateformat');
+var Logger = require('../models/Logger');
 
 exports.login = function (req, res, next){
 	res.render('login', {title:'Login'})
@@ -13,7 +9,7 @@ exports.login = function (req, res, next){
 
 exports.logout = function (req, res, next){
 	req.session.destroy();
-	res.redirect('/login');
+	res.redirect('/');
 }
 
 exports.logon = function (req, res, next){
@@ -28,7 +24,10 @@ exports.logon = function (req, res, next){
 			if(row){
 				//TODO: session中
 				storeSession(row, req, res);
-				res.redirect('/');
+				row.lastlogintime = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
+				user.updateUser(row, function(er){
+					res.redirect('/');
+				})
 			}else{
 				console.log('no user');
 				res.render('login', {message:'该用户不存在'});
@@ -39,9 +38,12 @@ exports.logon = function (req, res, next){
 
 exports.setting = function(req, res, next){
 	res.render('user/setting', {message:'ok'}, function(err, html){
-		if(err != null)
-			res.redirect('/login');
-		res.send(html);
+		if(err != null){
+			//res.redirect('/login');
+			res.render('404', {message:err});
+		}else{
+			res.send(html);
+		}
 	});
 }
 exports.doSetting = function(req, res, next){
