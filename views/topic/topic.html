@@ -31,7 +31,7 @@
 										标签: <span class="label label-important"><%=topic.tag%></span>
 									</div>
 									<div>
-										<%=topic.author_id%> 在 <%=dateformat(topic.create_time, 'mm-dd HH:MM')%> 吐槽  <%=topic.author_id%> 在 <%=dateformat(topic.update_time, 'mm-dd HH:MM')%> 编辑
+										<%=topic.loginname%> 在 <%=dateformat(topic.create_time, 'mm-dd HH:MM')%> 吐槽  <%=topic.loginname%> 在 <%=dateformat(topic.update_time, 'mm-dd HH:MM')%> 编辑
 									</div>
 									<div>
 										<button type="button" class="btn btn-success">收藏一下</button>
@@ -45,20 +45,28 @@
 				    </div>
 				</div>
 				<div class="panel">
-					<div class="header">0 吐槽</div>
+					<div class="header"><%=topic.reply_count%> 吐槽</div>
+					<% for(var r in reply){ %>
 					<div class="inner" style="border-bottom: 1px solid #E5E5E5;">
-						sadfasf
-						<hr>
-						asdf
+						<div class="inner">
+							<%-markdown.toHTML(reply[r].content)%>
+						</div>
+						<% if(reply[r].child.length > 0){ 
+							for(var i=0; i < reply[r].child.length; i++){
+						%>
+						<div class="inner" style="margin-left: 50px;border-top: 1px solid #EEEEEE;">
+							<%-markdown.toHTML(reply[r].child[i].content) %>
+						</div>
+						<% } } %>
 					</div>
-					<div class="inner" style="border-bottom: 1px solid #E5E5E5;">
-						dsfgsdfg
-					</div>
+					<% } %>
 				</div>
 				<div class="panel">
 					<div class="header">吐槽几句</div>
 					<div class="inner">
-						<form action="/topic/releaseTopic" method="post" id="form1" class="form-horizontal">
+						<form action="/topic/reply" method="post" id="form1" class="form-horizontal">
+							<input type="hidden" name="topic_id" value="<%=topic.id%>"/>
+							<input type="hidden" name="topic_uuid" value="<%=topic.uuid%>"/>
 							<div>
 								<div>
 									<span class="badge badge-info" id="edit_mark" style="cursor: pointer;">Markdown</span>
@@ -90,7 +98,7 @@
 	</div>
 	<script type="text/javascript" src="<%=site_host%>/markdown.js"></script>
 	<script type="text/javascript">
-		/* $('#edit_pre').bind('click', function(){
+		$('#edit_pre').bind('click', function(){
 			var preview_content = markdown.toHTML($('#edit_box').val());
 			$('#edit_pre').addClass('badge-info');
 			$('#edit_mark').removeClass('badge-info');
@@ -111,7 +119,69 @@
 		});
 		$('#save_btn').bind('click', function(){
 			$('#form1').submit();
-		}); */
+		});
+		
+		
+		
+		HTMLTextAreaElement.prototype.getCaretPosition = function () { //return the caret position of the textarea
+		    return this.selectionStart;
+		};
+		HTMLTextAreaElement.prototype.setCaretPosition = function (position) { //change the caret position of the textarea
+		    this.selectionStart = position;
+		    this.selectionEnd = position;
+		    this.focus();
+		};
+		HTMLTextAreaElement.prototype.hasSelection = function () { //if the textarea has selection then return true
+		    if (this.selectionStart == this.selectionEnd) {
+		        return false;
+		    } else {
+		        return true;
+		    }
+		};
+		HTMLTextAreaElement.prototype.getSelectedText = function () { //return the selection text
+		    return this.value.substring(this.selectionStart, this.selectionEnd);
+		};
+		HTMLTextAreaElement.prototype.setSelection = function (start, end) { //change the selection area of the textarea
+		    this.selectionStart = start;
+		    this.selectionEnd = end;
+		    this.focus();
+		};
+		 
+		var textarea = document.getElementsByTagName('textarea')[0];
+		 
+		textarea.onkeydown = function(event) {
+		     
+		    //support tab on textarea
+		    if (event.keyCode == 9) { //tab was pressed
+		        var newCaretPosition;
+		        newCaretPosition = textarea.getCaretPosition() + "    ".length;
+		        textarea.value = textarea.value.substring(0, textarea.getCaretPosition()) + "    " + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
+		        textarea.setCaretPosition(newCaretPosition);
+		        return false;
+		    }
+		    if(event.keyCode == 8){ //backspace
+		        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+		            var newCaretPosition;
+		            newCaretPosition = textarea.getCaretPosition() - 3;
+		            textarea.value = textarea.value.substring(0, textarea.getCaretPosition() - 3) + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
+		            textarea.setCaretPosition(newCaretPosition);
+		        }
+		    }
+		    if(event.keyCode == 37){ //left arrow
+		        var newCaretPosition;
+		        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+		            newCaretPosition = textarea.getCaretPosition() - 3;
+		            textarea.setCaretPosition(newCaretPosition);
+		        }   
+		    }
+		    if(event.keyCode == 39){ //right arrow
+		        var newCaretPosition;
+		        if (textarea.value.substring(textarea.getCaretPosition() + 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+		            newCaretPosition = textarea.getCaretPosition() + 3;
+		            textarea.setCaretPosition(newCaretPosition);
+		        }
+		    }
+		}
 	</script>
 </body>
 	

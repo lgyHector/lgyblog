@@ -4,15 +4,15 @@ var dateformat = require('dateformat');
 var generateId = require('time-uuid');
 var Pager =require('../models/Pager');
 var Reply = require('../models/Reply');
+var EventProxy = require('eventproxy');
+var markdown = require( "markdown" ).markdown;
 
 exports.index = function (req, res, next){
 	var pageNo = 1;
 	if(req.query.page)
 		pageNo = req.query.page;
-	Reply.getTopicReply({topic_id:1}, function(rs){
-		console.log(rs);
-	});
-	/*Topic.getAllTopics({status:'DEL', pageNo:pageNo, pageSize:2}, function(rows, pageInfo){
+	
+	Topic.getAllTopics({status:'DEL', pageNo:pageNo, pageSize:2}, function(rows, pageInfo){
 		res.render('index', {
 			title : '卧槽~', 
 			topics : rows, 
@@ -20,19 +20,31 @@ exports.index = function (req, res, next){
 			page : Pager.getPager(pageInfo),
 			url : Pager.generateUrl(req)
 		});
-	});*/
+	});
 };
 
 exports.getTopicByUUid = function (req, res, next){
 	var uuid = req.params.uuid;
-	Topic.getTopicByUUid({uuid:uuid}, function (row){
-		res.render('topic/topic', {topic:row, dateformat:dateformat}, function(err, html){
+	var ep = EventProxy.create('topic', 'reply', function(topic, reply){
+		res.render('topic/topic', {topic:topic, reply:reply, dateformat:dateformat, markdown:markdown}, function(err, html){
 			if(null != err)
 				res.render('404', {message:err});
 			else
 				res.send(html);
 		});
-	})
+	}); 
+	ep.bind('error', function (err) {
+	    // 卸载掉所有handler
+	    ep.unbind();
+	    // 异常回调
+	    next(err);
+	});
+	Topic.getTopicByUUid({uuid:uuid}, function (row){
+		ep.emit('topic', row);
+	});
+	Reply.getTopicReply({uuid:uuid}, function(reply){
+		ep.emit('reply', reply);
+	});
 };
 
 exports.newTopic = function (req, res, next){
@@ -69,3 +81,4 @@ exports.releaseTopic = function (req, res, next){
 		}
 	});
 }
+

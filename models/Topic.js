@@ -43,8 +43,32 @@ Topic.prototype.save = function (t, callback){
 	});
 }
 
+Topic.update = function (param, callback){
+	mysql.use('t_topic').where('id = ?', param.topic_id)
+	.get(function(row){
+		if(row){
+			mysql.use('t_topic').where('id = ?', param.topic_id)
+			.save({
+				reply_count : row.reply_count + 1,
+				last_reply_time : param.last_reply_time,
+				last_reply : param.last_reply
+			}, function(ef){
+				mysql.close();
+				callback(ef);
+			})
+		}
+	});
+}
+
 Topic.getTopicByUUid = function (param, callback){
-	mysql.use('t_topic').where('uuid = ?', param.uuid)
+	mysql.use('t_topic AS T').join('t_user AS U ON T.author_id = U.id')
+	.select('T.id, T.uuid uuid, T.title title, T.content content, T.top top, '+
+			'T.reply_count reply_count, T.collect_count collect_count,'+
+			'T.click_count click_count, T.create_time create_time,'+
+			'T.update_time update_time, T.last_reply_time last_reply_time,'+
+			'T.last_reply last_reply, T.tag tag, T.status status,'+
+			'U.id user_id, U.loginname loginname')
+	.where('T.uuid = ?', param.uuid)
 	.get(function(topic){
 		mysql.close();
 		callback(topic);
