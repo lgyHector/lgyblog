@@ -25,7 +25,7 @@ Topic.prototype.save = function (t, callback){
 	mysql.use('t_topic').add({
 		'uuid' : this.uuid,
 		'title' : this.title,
-		'content' : this.content,
+		'content' : this.content.replace(/\r\n/g, '\n'),//这个梗很无语啊...
 		'author_id' : this.author_id,
 		'top' : this.top,
 		'reply_count' : this.reply_count,

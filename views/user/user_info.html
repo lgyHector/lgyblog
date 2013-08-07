@@ -4,7 +4,7 @@
 	<div class="inner">
 		<div>
 			<img src="<%=site_host%>/head_img.jpg" class="img-polaroid head_img_80" />
-			<span>lgyhitler</span>
+			<span><%=user.name%></span>
 		</div>
 		<div style="margin-top: 10px;">
 			<span class="label label-important">御宅</span>
@@ -13,14 +13,15 @@
 		</div>
 		<div style="margin-top: 10px; padding: 5px 5px;">
 			<ul class="unstyled">
-				<li>0 吐槽</li>
-				<li>0 槽点</li>
+				<li><%=user.topic_count%> 吐槽</li>
+				<li><%=user.score%> 槽点</li>
 				<li>0 关注</li>
 				<li>0 相关</li>
 			</ul>
 		</div>
 		<div class="alert alert-info">
-			宜将剩勇追穷寇，莫要沽名学霸王。
+			<%=user.sign%>
+			<!-- 宜将剩勇追穷寇，莫要沽名学霸王。 -->
 		</div>
 	</div>
 	<% }else{ %>

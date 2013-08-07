@@ -12,7 +12,7 @@ function User(user){
 	this.email = user.email;
 	this.head_url = user.headUrl;
 	this.sign = user.sign;
-	this.properties = user.properties;
+	this.properties = user.properties;// color : 属性 ,
 	this.lastlogintime = user.lastlogintime;
 	
 	this.topic_count = user.topic_count;
@@ -46,4 +46,27 @@ User.updateUser = function (user, callback){
 		mysql.close();
 		callback(affectedRows);
 	})
+}
+User.regist = function (user, callback){
+	mysql.use('t_user').where('loginname = ?', user.name)
+	.get(function(row){
+		if(row){
+			mysql.close();
+			callback(-1);//已存在
+		}else{
+			mysql.use('t_user').add({
+				loginname : user.name,
+				password : user.pass,
+				gender : user.gender,
+				name : user.name,
+				email : user.email,
+				registtime : user.registtime
+			}, function(id){
+				mysql.close();
+				if(id){
+					callback(id);
+				}
+			})
+		}
+	});
 }

@@ -13,6 +13,8 @@ module.exports =  function (app){
 	app.get('/logout', user.logout);
 	app.get('/setting', auth.userRequired, user.setting);
 	app.post('/doSetting', auth.userRequired, user.doSetting);
+	app.get('/regist', user.regist);
+	app.post('/doRegist', user.doRegist);
 	
 	/**发帖**/
 	app.get('/topic/newTopic', auth.userRequired, topic.newTopic);

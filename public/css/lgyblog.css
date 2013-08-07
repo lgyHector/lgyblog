@@ -35,6 +35,9 @@
 	padding: 1px 10px; 
 	position: relative;
 }
+.username {
+	color: #B7ADAD;
+}
 .head_img_80{
 	width: 80px; 
 	height: 80px;
@@ -72,6 +75,28 @@
 .unlogin_box{
 	padding: 10px;
 }
+.login_top {
+	background: url('sea.png') repeat-x scroll 0 0 transparent;
+}
+.login_form_box {
+	margin-top:60px;
+	width: 500px;
+}
+.login_top_bi {
+	background: url('bi.png') no-repeat;
+	width: 91px;
+	height: 132px;
+	position: absolute;
+	top: -76px;
+}
+.login_top_li {
+	background: url('li.png') no-repeat;
+	width: 85px;
+	height: 128px;
+	position: absolute;
+	top: -74px;
+	right: 80px;
+}
 .saonian_box{
 	margin-bottom: 10px;
 }
@@ -81,6 +106,7 @@
 	margin-right: 5px;
 }
 .title-txtarea, .content-txtarea{
+	background: url("ika_touming_60.png") no-repeat scroll right bottom transparent;
 	width: 600px;
 }
 .tag-select{

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<% include head.html %>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="head">
+		<% include top_bar.html %>
+	</div>
+	<div class="container" style="margin-top: 50px;">
+		<div style="position: relative ;float:right;top: 200px;">
+		asdf
+		</div>
+		<div>
+			<div id="legend" class="">
+				<legend class="">注册</legend>
+			</div>
+			<form class="form-horizontal" id="form1" method="post" action="/doRegist">
+				<fieldset>
+					<div class="control-group">
+						<!-- Text input-->
+						<label class="control-label" for="input01">登录名</label>
+						<div class="controls">
+							<input placeholder="校长" class="input-xlarge" type="text" id="loginName" name="loginName">
+							<span id="alert_loginName"></span>
+							<p class="help-block">节操是神马</p>
+						</div>
+					</div>
+					<div class="control-group">
+						<!-- Text input-->
+						<label class="control-label" for="input01">密码</label>
+						<div class="controls">
+							<input placeholder="123456" class="input-xlarge" type="text" id="password" name="password">
+							<span id="alert_password"></span>
+							<p class="help-block">没必要遮遮掩掩的</p>
+						</div>
+					</div>
+					<div class="control-group">
+						<!-- Text input-->
+						<label class="control-label" for="input01">重复密码</label>
+						<div class="controls">
+							<input placeholder="" class="input-xlarge" type="text" id="password2" name="password2">
+							<span id="alert_password2"></span>
+							<p class="help-block"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<!-- Text input-->
+						<label class="control-label" for="input01">邮箱</label>
+						<div class="controls">
+							<input placeholder="123@123.com" class="input-xlarge" type="text" id="email" name="email">
+							<span id="alert_email"></span>
+							<p class="help-block"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<!-- Select Basic -->
+						<label class="control-label"></label>
+						<div class="controls">
+							<select class="input-xlarge" id="gender" name="gender">
+								<option value="♂">♂</option>
+								<option value="♀">♀</option>
+							</select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label"></label>
+						<!-- Button -->
+						<div class="controls">
+							<button class="btn btn-primary" type="button" id="regist_btn">注册</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="jquery-1.7.min.js"></script>
+	<script type="text/javascript" src="bootstrap.js"></script>
+    <script type="text/javascript">
+    	var RegistCheck = {
+    			checkLoginName : function(name){
+    				if (name == '') {
+    					show_alert({id:'loginName', css:'alert alert-error', content:"<strong>Error: </strong> 骚年,填个账号先,不要尝试SQL注入~"});
+    					return false;
+    				} else {
+    					show_alert({id:'loginName', css:'alert alert-success', content:'<strong>Done !</strong>'});
+    					return true;
+    				}
+    			},
+    			checkPassword : function(pass){
+    				if(pass == ''){
+    					show_alert({id:'password', css:'alert alert-error', content:"<strong>Error: </strong> 骚年,密码,不要尝试SQL注入~"});
+    					return false;
+    				}else{
+    					show_alert({id:'password', css:'alert alert-success', content:'<strong>Done !</strong>'});
+    					return true;
+    				}
+    			},
+    			checkPassword2 : function(pass, pass2){
+    				if(pass2 == '' || pass2 != pass){
+    					show_alert({id:'password2', css:'alert alert-error', content:"<strong>Error: </strong> 两次密码不一致!"});
+    					return false
+    				}else{
+    					show_alert({id:'password2', css:'alert alert-success', content:'<strong>Done !</strong>'});
+    					return true;
+    				}
+    			},
+    			checkEmail : function(email){
+    				if(email != '' && !/^[a-zA-Z0-9_+.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,4}$/.test(email)){
+    					show_alert({id:'email', css:'alert alert-error', content:"<strong>Error: </strong> 邮箱格式错误!"});
+    					return false;
+    				}else{
+    					show_alert({id:'email', css:'alert alert-success', content:'<strong>Done !</strong>'});
+    					return true;
+    				}
+    			}
+    	}
+		function regist() {
+			var name = $.trim($("#loginName").val());
+			var pass = $.trim($("#password").val());
+			var pass2 = $.trim($("#password2").val());
+			var email = $.trim($("#email").val());
+			var gender = $("#gender").val();
+			
+			if(!RegistCheck.checkLoginName(name))
+				return ;
+			if(!RegistCheck.checkPassword(pass))
+				return ;
+			if(!RegistCheck.checkPassword2(pass, pass2)){
+				return ;
+			}
+			if(!RegistCheck.checkEmail(email)){
+				return ;
+			}
+			$("#form1").submit();
+		}
+		$("#regist_btn").click(function() {
+			var btn = $(this);
+			btn.button("loading");
+			regist();
+			setTimeout(function() {
+				btn.button("reset");
+			}, 1000);
+		})
+		function show_alert(param) {
+			$("#alert_"+param.id).attr('class', param.css);
+			$("#alert_"+param.id).html(param.content);
+		}
+		function hide_alert(param){
+			$("#alert_"+param.id).removeClass(param.css);
+			$("#alert_"+param.id).html('');
+		}
+	</script>
+</html>

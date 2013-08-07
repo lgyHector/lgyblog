@@ -4,7 +4,7 @@ var dateformat = require('dateformat');
 var Logger = require('../models/Logger');
 
 exports.login = function (req, res, next){
-	res.render('login', {title:'Login'})
+	res.render('login', {title:'Login'});
 };
 
 exports.logout = function (req, res, next){
@@ -62,7 +62,25 @@ exports.doSetting = function(req, res, next){
 		})
 	});
 }
-
+exports.regist = function (req, res, next){
+	res.render('regist', {title:'本屌注册'});
+}
+exports.doRegist = function (req, res, next){
+	var userModel = {
+		name : req.body.loginName,
+		pass : req.body.password,
+		email : req.body.email,
+		gender : req.body.gender,
+		registtime: dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss')
+	}
+	user.regist(userModel, function(result){
+		if(result >= 0){
+			res.render('registed', {message:'注册成功!'});
+		}else{
+			res.render('registed', {message:'用户名已存在！'});
+		}
+	});
+}
 
 function storeSession(user, req, res){
 	req.session.user = user;

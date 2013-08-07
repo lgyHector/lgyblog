@@ -5,7 +5,9 @@ var generateId = require('time-uuid');
 var Pager =require('../models/Pager');
 var Reply = require('../models/Reply');
 var EventProxy = require('eventproxy');
-var markdown = require( "markdown" ).markdown;
+//var markdown = require( "markdown" ).markdown;
+var Showdown = require('showdown');
+var mdConverter = new Showdown.converter();
 
 exports.index = function (req, res, next){
 	var pageNo = 1;
@@ -26,7 +28,7 @@ exports.index = function (req, res, next){
 exports.getTopicByUUid = function (req, res, next){
 	var uuid = req.params.uuid;
 	var ep = EventProxy.create('topic', 'reply', function(topic, reply){
-		res.render('topic/topic', {topic:topic, reply:reply, dateformat:dateformat, markdown:markdown}, function(err, html){
+		res.render('topic/topic', {topic:topic, reply:reply, dateformat:dateformat, mdConverter:mdConverter}, function(err, html){
 			if(null != err)
 				res.render('404', {message:err});
 			else

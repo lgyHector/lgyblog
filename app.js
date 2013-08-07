@@ -30,10 +30,22 @@ app.configure(function(){
 
 app.configure('development', function () {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  config.db_opt = {
+		host : 'localhost',
+		user : 'root',
+		password : 'sqs',
+		database : 'lgy'
+  }
 });
 
 app.configure('production', function () {
   app.use(express.errorHandler());
+  config.db_opt = {
+		  host : database['mysql-5.1'][0]['credentials']['hostname'],
+		  user : database['mysql-5.1'][0]['credentials']['user'],
+		  password : database['mysql-5.1'][0]['credentials']['password'],
+		  database : database['mysql-5.1'][0]['credentials']['name']
+	  }
 });
 
 routes(app);

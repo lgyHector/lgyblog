@@ -24,7 +24,7 @@
 							<div style="padding: 10px 0;">
 								<div style=""><h2><%=topic.title%></h2></div>
 								<hr>
-								<div><%=topic.content%></div>
+								<div><%-mdConverter.makeHtml(topic.content) %></div>
 								<hr>
 								<div>
 									<div>
@@ -46,40 +46,64 @@
 				</div>
 				<div class="panel">
 					<div class="header"><%=topic.reply_count%> 吐槽</div>
-					<% for(var r in reply){ %>
+					<% var f=1;for(var r in reply){ %>
 					<div class="inner" style="border-bottom: 1px solid #E5E5E5;">
 						<div class="inner">
-							<%-markdown.toHTML(reply[r].content)%>
+							<div>
+								<a href="../user/<%=reply[r].user.name%>"><img src="<%=site_host%>/saonian.jpg" class="img-rounded" /></a>
+								<span class="username"><%=reply[r].user.name%></span>
+								<a><%=dateformat(reply[r].reply_time, 'mm-dd HH:MM')%></a>
+								<span class="username" style="float:right">
+									<%=f%>楼
+									<a href="#">回复</a>
+								</span>
+							</div>
+							<div style="margin-left: 70px;">
+								<%-mdConverter.makeHtml(reply[r].content)%>
+							</div>
 						</div>
 						<% if(reply[r].child.length > 0){ 
 							for(var i=0; i < reply[r].child.length; i++){
 						%>
 						<div class="inner" style="margin-left: 50px;border-top: 1px solid #EEEEEE;">
-							<%-markdown.toHTML(reply[r].child[i].content) %>
+							<div>
+								<a href="../user/<%=reply[r].user.name%>"><img src="<%=site_host%>/saonian.jpg" class="img-rounded" /></a>
+								<span class="username"><%=reply[r].user.name%></span>
+								<a><%=dateformat(reply[r].reply_time, 'mm-dd HH:MM')%></a>
+							</div>
+							<div style="margin-left: 70px;">
+								<%-mdConverter.makeHtml(reply[r].child[i].content) %>
+							</div>
 						</div>
 						<% } } %>
 					</div>
-					<% } %>
+					<% f++;} %>
 				</div>
 				<div class="panel">
 					<div class="header">吐槽几句</div>
+					<% if(user){ %>
 					<div class="inner">
 						<form action="/topic/reply" method="post" id="form1" class="form-horizontal">
 							<input type="hidden" name="topic_id" value="<%=topic.id%>"/>
 							<input type="hidden" name="topic_uuid" value="<%=topic.uuid%>"/>
 							<div>
-								<div>
+								<div style="margin: 10 0px;">
 									<span class="badge badge-info" id="edit_mark" style="cursor: pointer;">Markdown</span>
 									<span class="badge" id="edit_pre" style="cursor: pointer;">Preview</span>
 								</div>
 								<textarea rows="5" name="content" placeholder="卧槽。。。" class="content-txtarea" id="edit_box"></textarea>
 								<div id="preview_box" class="preview-box" style="display:none;"></div>
 							</div>
-							<div>
+							<div class="inner">
 								<button type="button" id="save_btn" class="btn btn-success">发布</button>
 							</div>
 						</form>
 					</div>
+					<% }else{ %>
+					<div class="inner">
+						先<a href="/login">登录</a>再留下节操吧~
+					</div>
+					<% } %>
 				</div>
 			</div>
 			<div id="sidebar">
@@ -97,6 +121,7 @@
 	
 	</div>
 	<script type="text/javascript" src="<%=site_host%>/markdown.js"></script>
+	<script type="text/javascript" src="<%=site_host%>/commen.js"></script>
 	<script type="text/javascript">
 		$('#edit_pre').bind('click', function(){
 			var preview_content = markdown.toHTML($('#edit_box').val());
@@ -120,68 +145,9 @@
 		$('#save_btn').bind('click', function(){
 			$('#form1').submit();
 		});
+		var textarea = document.getElementById('edit_box');
+		textarea.onkeydown = allowTab;
 		
-		
-		
-		HTMLTextAreaElement.prototype.getCaretPosition = function () { //return the caret position of the textarea
-		    return this.selectionStart;
-		};
-		HTMLTextAreaElement.prototype.setCaretPosition = function (position) { //change the caret position of the textarea
-		    this.selectionStart = position;
-		    this.selectionEnd = position;
-		    this.focus();
-		};
-		HTMLTextAreaElement.prototype.hasSelection = function () { //if the textarea has selection then return true
-		    if (this.selectionStart == this.selectionEnd) {
-		        return false;
-		    } else {
-		        return true;
-		    }
-		};
-		HTMLTextAreaElement.prototype.getSelectedText = function () { //return the selection text
-		    return this.value.substring(this.selectionStart, this.selectionEnd);
-		};
-		HTMLTextAreaElement.prototype.setSelection = function (start, end) { //change the selection area of the textarea
-		    this.selectionStart = start;
-		    this.selectionEnd = end;
-		    this.focus();
-		};
-		 
-		var textarea = document.getElementsByTagName('textarea')[0];
-		 
-		textarea.onkeydown = function(event) {
-		     
-		    //support tab on textarea
-		    if (event.keyCode == 9) { //tab was pressed
-		        var newCaretPosition;
-		        newCaretPosition = textarea.getCaretPosition() + "    ".length;
-		        textarea.value = textarea.value.substring(0, textarea.getCaretPosition()) + "    " + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
-		        textarea.setCaretPosition(newCaretPosition);
-		        return false;
-		    }
-		    if(event.keyCode == 8){ //backspace
-		        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
-		            var newCaretPosition;
-		            newCaretPosition = textarea.getCaretPosition() - 3;
-		            textarea.value = textarea.value.substring(0, textarea.getCaretPosition() - 3) + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
-		            textarea.setCaretPosition(newCaretPosition);
-		        }
-		    }
-		    if(event.keyCode == 37){ //left arrow
-		        var newCaretPosition;
-		        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
-		            newCaretPosition = textarea.getCaretPosition() - 3;
-		            textarea.setCaretPosition(newCaretPosition);
-		        }   
-		    }
-		    if(event.keyCode == 39){ //right arrow
-		        var newCaretPosition;
-		        if (textarea.value.substring(textarea.getCaretPosition() + 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
-		            newCaretPosition = textarea.getCaretPosition() + 3;
-		            textarea.setCaretPosition(newCaretPosition);
-		        }
-		    }
-		}
 	</script>
 </body>
 	
