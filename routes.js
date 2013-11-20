@@ -22,5 +22,7 @@ module.exports =  function (app){
 	app.post('/topic/reply', reply.reply);
 	app.get('/topic/:uuid', topic.getTopicByUUid);
 	
+	/**系统**/
+	app.get('/error', user.error);
 }
 

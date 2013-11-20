@@ -86,13 +86,28 @@
 						<form action="/topic/reply" method="post" id="form1" class="form-horizontal">
 							<input type="hidden" name="topic_id" value="<%=topic.id%>"/>
 							<input type="hidden" name="topic_uuid" value="<%=topic.uuid%>"/>
-							<div>
-								<div style="margin: 10 0px;">
-									<span class="badge badge-info" id="edit_mark" style="cursor: pointer;">Markdown</span>
-									<span class="badge" id="edit_pre" style="cursor: pointer;">Preview</span>
+							<div class="inner">
+								<ul class="nav nav-pills">
+									<li class="active"><a data-toggle="pill" href="#markdown">markdown</a></li>
+									<li><a class="preview-btn" data-toggle="pill"
+										href="#preview">预览</a></li>
+									<!-- <li><a data-toggle="pill" href="#tags">标签</a></li> -->
+								</ul>
+								<div class="tab-content">
+									<div id="markdown" class="active tab-pane">
+										<div id="wmd-button-bar"></div>
+										<div class="input">
+											<textarea rows="20" name="content" id="wmd-input" class="content-txtarea" placeholder="卧槽。。。"></textarea>
+										</div>
+									</div>
+									<div class="tab-pane" id="preview">
+										<div class="wmd-preview topic-wmd-preview" id="wmd-preview"></div>
+									</div>
+									<div class="tab-pane" id="tags">
+										<div class="tags_select">
+										</div>
+									</div>
 								</div>
-								<textarea rows="5" name="content" placeholder="卧槽。。。" class="content-txtarea" id="edit_box"></textarea>
-								<div id="preview_box" class="preview-box" style="display:none;"></div>
 							</div>
 							<div class="inner">
 								<button type="button" id="save_btn" class="btn btn-success">发布</button>
@@ -120,33 +135,43 @@
 	<div id="foot">
 	
 	</div>
-	<script type="text/javascript" src="<%=site_host%>/markdown.js"></script>
+	<script type="text/javascript" src="<%=site_host%>/markdown/Markdown.Converter.js"></script>
+	<script type="text/javascript" src="<%=site_host%>/markdown/Markdown.Editor.js"></script>
+	<script type="text/javascript" src="<%=site_host%>/markdown/showdown.js"></script>
 	<script type="text/javascript" src="<%=site_host%>/commen.js"></script>
 	<script type="text/javascript">
-		$('#edit_pre').bind('click', function(){
-			var preview_content = markdown.toHTML($('#edit_box').val());
-			$('#edit_pre').addClass('badge-info');
-			$('#edit_mark').removeClass('badge-info');
-			
-			$('#preview_box').html(preview_content);
-			$('#edit_box').css('display', 'none');
-			$('#preview_box').css('display', 'block');
-		});
-		$('#edit_mark').bind('click', function(){
-			$('#edit_mark').addClass('badge-info');
-			$('#edit_pre').removeClass('badge-info');
-			
-			$('#edit_box').css('display', 'block');
-			$('#preview_box').css('display', 'none');
-		});
-		$('#new_t_btn').bind('click', function(){
-			window.location.href = '/topic/newTopic';
-		});
-		$('#save_btn').bind('click', function(){
+		$('#save_btn').click( function(){
 			$('#form1').submit();
 		});
-		var textarea = document.getElementById('edit_box');
-		textarea.onkeydown = allowTab;
+		$(document).ready(function () {
+            var editor;
+            function run_md_editor() {
+                var converter = new Showdown.converter();
+                editor = new Markdown.Editor(converter);
+                editor.run();
+            }
+            run_md_editor();
+            
+            $('#wmd-input').mouseover(function(){
+                $('#wmd-input').focus()
+            });
+            $('.preview-btn').click(function() {
+                editor.makePreviewHtml();
+            });
+            document.onkeyup=function(event) {
+                if(window.ActiveXObject) {
+                    var keydown = window.event.keyCode;
+                    event=window.event;
+                }else{
+                    var keydown = event.keyCode;
+                    if(event.ctrlKey == true && keydown == 13){
+                        if(submit_btn){
+                            submit_btn.click();
+                        }
+                    }
+                }
+            };
+        });
 		
 	</script>
 </body>

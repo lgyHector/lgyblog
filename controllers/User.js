@@ -82,10 +82,16 @@ exports.doRegist = function (req, res, next){
 	});
 }
 
+exports.error = function (req, res, next){
+	var msg = req.qurey.msg;
+	res.render('error', {message:msg});
+}
+
 function storeSession(user, req, res){
 	req.session.user = user;
 	//TODO: encrypt 加密token信息
 	var auth_token = user.id + '_' + user.loginname + '_' +user.password;
 	res.cookie('lgyCookie', auth_token, {expires: new Date(Date.now() + 900000), httpOnly: true});
 }
+
 

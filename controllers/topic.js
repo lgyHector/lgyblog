@@ -1,12 +1,11 @@
-var util = require('../utils/utils');
-var Topic = require('../models/Topic');
 var dateformat = require('dateformat');
 var generateId = require('time-uuid');
+var EventProxy = require('eventproxy');
+var Showdown = require('showdown');
+var util = require('../utils/utils');
+var Topic = require('../models/Topic');
 var Pager =require('../models/Pager');
 var Reply = require('../models/Reply');
-var EventProxy = require('eventproxy');
-//var markdown = require( "markdown" ).markdown;
-var Showdown = require('showdown');
 var mdConverter = new Showdown.converter();
 
 exports.index = function (req, res, next){
@@ -20,7 +19,8 @@ exports.index = function (req, res, next){
 			topics : rows, 
 			dateformat : dateformat, 
 			page : Pager.getPager(pageInfo),
-			url : Pager.generateUrl(req)
+			url : Pager.generateUrl(req),
+			l:req.query.l // 判断是否登录情况下弹出登陆框
 		});
 	});
 };
@@ -49,11 +49,16 @@ exports.getTopicByUUid = function (req, res, next){
 	});
 };
 
-exports.newTopic = function (req, res, next){
-	res.render('topic/new_topic', {message:'ok'}, function (err, html){
-		if(err != null){
-			res.render('404', {message:err});
-		}else{
+exports.newTopic = function(req, res, next) {
+	res.render('topic/new_topic', {
+		message : 'ok',
+		token : util.generateToken(req)// token
+	}, function(err, html) {
+		if (err != null) {
+			res.render('404', {
+				message : err
+			});
+		} else {
 			res.send(html);
 		}
 	});

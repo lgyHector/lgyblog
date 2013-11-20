@@ -75,6 +75,7 @@
 					<div class="header">热门吐槽</div>
 					<div class="inner">
 						ddd
+						<%=l  %>
 					</div>
 				</div>
 			</div>
@@ -110,6 +111,12 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		$(function(){
+			var l = '<%=l  %>';
+			if(l == 'logon'){
+				login();
+			}
+		})
 		$('#new_t_btn').bind('click', function(){
 			window.location.href = '/topic/newTopic';
 		});
